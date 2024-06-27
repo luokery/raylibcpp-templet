@@ -1,0 +1,69 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build debug",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "PLATFORM=PLATFORM_DESKTOP",
+                "BUILD_MODE=DEBUG",
+                "PROJECT_NAME=app",
+                "OBJS=app.o"
+            ],
+            "windows": {
+                "command": "mingw32-make.exe",
+                "args": [
+                    "RAYLIB_PATH=C:/kunkka/repository/raylib",
+                    "PROJECT_NAME=raylibcpp-templet",
+                    // 额外的obj对象: 留空
+                    "OBJS=",
+                    "BUILD_MODE=DEBUG"
+                ]
+            },
+            "osx": {
+                "args": [
+                    "RAYLIB_PATH=<path_to_raylib>/raylib",
+                    "PROJECT_NAME=${fileBasenameNoExtension}",
+                    "OBJS=${fileBasenameNoExtension}.c",
+                    "BUILD_MODE=DEBUG"
+                ]
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "build release",
+            "type": "process",
+            "command": "make",
+            "args": [
+                "PLATFORM=PLATFORM_DESKTOP",
+                "PROJECT_NAME=app",
+                "OBJS=app.o"
+            ],
+            "windows": {
+                "command": "mingw32-make.exe",
+                "args": [
+                    "RAYLIB_PATH=C:/kunkka/repository/raylib",
+                    "PROJECT_NAME=raylibcpp-templet",
+                    // 额外的obj对象: 留空
+                    "OBJS=",
+                    "BUILD_MODE=RELEASE"
+                ]
+            },
+            "osx": {
+                "args": [
+                    "RAYLIB_PATH=<path_to_raylib>/raylib",
+                    "PROJECT_NAME=${fileBasenameNoExtension}",
+                    "OBJS=${fileBasenameNoExtension}.c"
+                ]
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

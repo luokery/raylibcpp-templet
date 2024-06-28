@@ -5,6 +5,75 @@
  raylib官方github: https://github.com/raysan5/raylib
 ~~~
 
+# **编译环境配置**
+# 1.下载
+## raylib安装: 
+### c语言库: 此为官方库, c/c++都支持
+
+* 使用git或直接去github下载zip, 解压就可以用
+
+[Github Raylib地址: https://github.com/raysan5/raylib](https://github.com/raysan5/raylib)
+
+
+### cpp语言库:
+
+* 使用git或直接去github下载zip, 解压就可以用
+  
+[Github Raylib-cpp地址: https://github.com/robloach/raylib-cpp](https://github.com/robloach/raylib-cpp)
+
+
+
+### 官方库 (**个人强烈不推荐**)
+
+![图片描述](readme/raylib官方库与环境下载.PNG)
+* raylib 5.0 Windows Installer 64bit (MinGW compiler) (118 MB)
+
+[raylib网站: www.raylib.com](www.raylib.com)
+
+## w64devkit安装
+
+* 去github下载, 也是解压可用: w64devkit-1.23.0.zip
+
+---
+# 2.配置环境
+
+- raylib: 解压到或git到 C:\kunkka\repository\raylib
+  
+- raylib-cpp: 解压到或git到 C:\kunkka\repository\raylib-cpp
+
+- w64devkit: 解压到 C:\sdk\w64devkit; 如果你要用命令行编译, 需要把C:\sdk\w64devkit\放到PATH环境变量中
+
+---
+
+# 3.配置Makefile文件
+# 3.1. 配置raylib路径
+
+~~~ makefile
+# Define required raylib variables
+PROJECT_NAME       ?= vscode-raylibcpp
+RAYLIB_VERSION     ?= 3.0.0
+RAYLIB_API_VERSION ?= 300
+RAYLIB_PATH        ?= C:/kunkka/repository/raylib
+~~~
+
+# 3.2. 配置编译器路径: 这里为w64devkit
+
+~~~ makefile
+# Define compiler path on Windows
+COMPILER_PATH      ?= C:/sdk/w64devkit/bin
+~~~
+
+# 3.3. 添加头文件路径: raylib-cpp
+
+## 查找注释, 在下方添加raylib-cpp的include
+
+~~~ makefile
+# Define include paths for required headers
+
+# 自定义:raylib-cpp include path
+INCLUDE_PATHS += -IC:/kunkka/repository/raylib-cpp/include
+~~~
+
 # **构建项目方式**
 
 ## *注意： 以下都是使用Makefile,此文件很重要.*

@@ -1,5 +1,5 @@
 ::批处理 raylib_makefile_example.bat
-
+::chcp 65001
 ::@echo off
 :: .
 :: Compile your examples using:  raylib_makefile_example.bat core/core_basic_window

@@ -5,6 +5,8 @@
             "includePath": [
                 "C:/kunkka/repository/raylib/src/**",
                 "C:/kunkka/repository/raylib/include/**",
+                "${workspaceFolder}/src/model/entity/**",
+                "${workspaceFolder}/src/util/**",
                 "${workspaceFolder}/**"
             ],
             "defines": [

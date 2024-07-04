@@ -32,9 +32,15 @@ RAYLIB_PATH        ?= C:/kunkka/repository/raylib
 # Define compiler path on Windows
 COMPILER_PATH      ?= C:/sdk/w64devkit/bin
 
+# 源文件子目录, 当模块化构建项目的时候配置: 如: 数据库目录, 工具目录, 都是基于src目录
+SUB_SRC_DIR_LIST = system character util model/entity 
+
 # Define default options
 # One of PLATFORM_DESKTOP, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
+
+# 打开windows cmd控制台, 打印日志显示: true=打开, false=不打开;   # -Wl,--subsystem,windows hides the console window
+CMD_WINDOWS_DEBUG_FLAG ?= TRUE
 
 # Locations of your newly installed library and associated headers. See ../src/Makefile
 # On Linux, if you have installed raylib but cannot compile the examples, check that
@@ -210,7 +216,13 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
         # resource file contains windows executable icon and properties
         # -Wl,--subsystem,windows hides the console window
-        CFLAGS += $(RAYLIB_PATH)/src/raylib.rc.data -Wl,--subsystem,windows
+
+        ifeq ($(CMD_WINDOWS_DEBUG_FLAG),TRUE)
+            CFLAGS += $(RAYLIB_PATH)/src/raylib.rc.data 
+        else
+            CFLAGS += $(RAYLIB_PATH)/src/raylib.rc.data -Wl,--subsystem,windows
+        endif
+        
     endif
     ifeq ($(PLATFORM_OS),LINUX)
         ifeq ($(RAYLIB_LIBTYPE),STATIC)
@@ -256,6 +268,11 @@ INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
 # 项目的include路径
 INCLUDE_PATHS += -I${PROJECT_PATH}/include
 INCLUDE_PATHS += -I${PROJECT_PATH}/src
+# SUB_SRC_DIR_LIST = character util
+INCLUDE_PATHS += -I${PROJECT_PATH}/src/system
+INCLUDE_PATHS += -I${PROJECT_PATH}/src/util
+INCLUDE_PATHS += -I${PROJECT_PATH}/src/model/entity
+
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)
     # RPI required libraries
@@ -365,7 +382,19 @@ OBJ_DIR = obj
 # Define all object files from source files
 # 有子工程或多工程编译才需要这个
 #SRC = $(call rwildcard, *.cpp, *.h) #原始
-SRC = $(wildcard *.cpp* ${PROJECT_PATH}/${SRC_DIR}/*.cpp*)
+
+SRC = $(wildcard *.cpp* ${SRC_DIR}/*.cpp*)
+
+# 源文件子目录处理
+SRC_DIRS = $(foreach dir,${SUB_SRC_DIR_LIST}, ${SRC_DIR}/${dir})
+#$(info SRC_DIRS=${SRC_DIRS});
+SUB_SRC = $(foreach dir,${SRC_DIRS}, $(wildcard ${dir}/*.cpp*))
+# Import source files from subdirectories of source files
+$(info source dirs:[${SRC_DIRS}]);
+# 合并源文件 和 子目录源文件
+# $(info SRC=$(SRC)) 
+SRC += $(SUB_SRC)
+# $(info SRC=$(SRC)) 
 
 #OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o) #原始注释
 # 单文件
@@ -396,6 +425,10 @@ all:
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
 	$(CC) -o $(PROJECT_NAME)$(EXT) ${SRC} $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM) 
+
+# 中文乱码问题
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=GBK")
+# -finput-charset=UTF-8 -fexec-charset=UTF-8
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)

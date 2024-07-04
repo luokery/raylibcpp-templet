@@ -60,7 +60,21 @@
 			"text_encoding": "cpp",
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
-			"variant": "cpp"
+			"variant": "cpp",
+			"cstring": "cpp",
+			"iostream": "cpp",
+			"istream": "cpp",
+			"map": "cpp",
+			"hash_map": "cpp",
+			"chrono": "cpp",
+			"mutex": "cpp",
+			"condition_variable": "cpp",
+			"ratio": "cpp",
+			"iomanip": "cpp",
+			"semaphore": "cpp",
+			"sstream": "cpp",
+			"stop_token": "cpp",
+			"thread": "cpp"
 		}
 	}
 }
